@@ -1,0 +1,64 @@
+{
+    "name": "screammpdf",
+    "version": "1.0.0",
+    "description": "Ett elegant verktyg för att extrahera och formatera text från PDF-filer",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "clean": "rimraf dist release",
+        "build": "node build.js",
+        "build:simple": "node build-simple.js",
+        "build:sfx": "node build-sfx.js",
+        "build:nsis": "node build-nsis.js",
+        "build:zip": "node build-zip.js",
+        "build:nolink": "electron-builder --win portable --config electron-builder.yml --dir",
+        "postinstall": "electron-builder install-app-deps"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "adm-zip": "^0.5.16",
+        "electron": "^29.1.0",
+        "electron-builder": "^24.9.1",
+        "electron-download": "^4.1.1",
+        "rimraf": "^6.0.1"
+    },
+    "dependencies": {
+        "pdf-parse": "^1.1.1"
+    },
+    "build": {
+        "appId": "com.screammpdf.app",
+        "productName": "ScreammPDF",
+        "win": {
+            "target": [
+                "portable"
+            ],
+            "artifactName": "${productName}_${version}.${ext}"
+        },
+        "portable": {
+            "unicode": false,
+            "artifactName": "${productName}_${version}_Portable.exe"
+        },
+        "extraResources": [
+            {
+                "from": "node_modules/",
+                "to": "node_modules",
+                "filter": [
+                    "**/*"
+                ]
+            }
+        ],
+        "files": [
+            "**/*",
+            "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj,c,h,cc,cpp,hpp,mk}",
+            "!**/._*",
+            "!**/electron-builder.{yaml,yml,json,json5,toml}",
+            "!**/{.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,.DS_Store,.gitignore,.gitkeep,.gitattributes,.npmignore,.idea,.vs,.eslintignore,.jshintignore,.flowconfig,.jshintrc,.eslintrc,.babelrc,.prettierrc,.stylelintrc,appveyor.yml,.travis.yml,circle.yml,.nyc_output}"
+        ],
+        "asar": false,
+        "directories": {
+            "buildResources": "resources",
+            "output": "dist"
+        }
+    }
+}

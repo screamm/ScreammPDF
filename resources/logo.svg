@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bakgrund -->
+  <rect x="10" y="10" width="180" height="180" rx="15" ry="15" fill="#f8f9fa" stroke="#4c6ef5" stroke-width="5"/>
+  
+  <!-- PDF-dokument -->
+  <rect x="40" y="40" width="120" height="140" rx="5" ry="5" fill="#ffffff" stroke="#dee2e6" stroke-width="2"/>
+  
+  <!-- Textlinjer -->
+  <rect x="55" y="60" width="90" height="4" rx="2" ry="2" fill="#4c6ef5"/>
+  <rect x="55" y="75" width="70" height="4" rx="2" ry="2" fill="#4c6ef5"/>
+  <rect x="55" y="90" width="90" height="4" rx="2" ry="2" fill="#4c6ef5"/>
+  <rect x="55" y="105" width="60" height="4" rx="2" ry="2" fill="#4c6ef5"/>
+  <rect x="55" y="120" width="80" height="4" rx="2" ry="2" fill="#4c6ef5"/>
+  
+  <!-- Textextraktionsikon -->
+  <path d="M130,130 L160,130 L160,160 L130,160 Z" fill="#fd7e14" stroke="#e67700" stroke-width="2"/>
+  <path d="M135,140 L155,140 M135,145 L155,145 M135,150 L155,150" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Pil som representerar extraktion -->
+  <path d="M110,145 L125,145" stroke="#212529" stroke-width="3" stroke-linecap="round"/>
+  <path d="M120,140 L130,145 L120,150" fill="none" stroke="#212529" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> 

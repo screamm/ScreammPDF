@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data:; script-src 'self';">
+  <title>ScreammPDF - Extrahera text från PDF</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Huvudfärgpalett */
+      --primary-color: #4c6ef5;
+      --primary-light: #edf2ff;
+      --primary-dark: #364fc7;
+      --primary-hover: #3b5bdb;
+      --primary-transparent: rgba(76, 110, 245, 0.1);
+      
+      /* Accentfärger */
+      --accent-color: #fd7e14;
+      --accent-hover: #e67700;
+      --accent-light: #fff4e6;
+      
+      /* Bakgrundsfärger */
+      --bg-color: #f8f9fa;
+      --bg-card: #ffffff;
+      --bg-hover: #f1f3f9;
+      
+      /* Textfärger */
+      --text-primary: #212529;
+      --text-secondary: #495057;
+      --text-tertiary: #868e96;
+      --text-light: #f8f9fa;
+      
+      /* Funktionella färger */
+      --success-color: #40c057;
+      --success-light: #ebfbee;
+      --warning-color: #fd7e14;
+      --warning-light: #fff4e6;
+      --error-color: #fa5252;
+      --error-light: #fff5f5;
+      
+      /* Kantfärger */
+      --border-color: #dee2e6;
+      --border-hover: #adb5bd;
+      
+      /* Skuggor */
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+      
+      /* Rundade hörn */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      
+      /* Animation */
+      --transition-fast: 0.2s;
+      --transition-normal: 0.3s;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 16px;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .app-container {
+      max-width: 1300px;
+      width: 95%;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .logo-highlight {
+      color: var(--accent-color);
+      font-weight: 700;
+    }
+    
+    .main-content {
+      display: grid;
+      grid-template-columns: minmax(320px, 35%) minmax(0, 1fr);
+      gap: 2rem;
+      margin-bottom: 2rem;
+      height: calc(100vh - 15rem); /* Anpassa höjden baserat på viewport */
+      min-height: 500px; /* Minsta tillåtna höjd */
+      transition: grid-template-columns 0.35s cubic-bezier(0.19, 1, 0.22, 1); /* Anpassad övergång */
+    }
+    
+    /* Lägg till medieförfrågningar för olika skärmstorlekar */
+    @media (min-width: 1200px) {
+      .main-content {
+        grid-template-columns: minmax(320px, 30%) minmax(0, 1fr); /* Previewrutan får mer utrymme på bredare skärmar */
+      }
+    }
+    
+    @media (min-width: 1600px) {
+      .main-content {
+        grid-template-columns: minmax(320px, 25%) minmax(0, 1fr); /* Previewrutan får ännu mer utrymme på mycket breda skärmar */
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .main-content {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      
+      .app-container {
+        padding: 1.5rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+    }
+    
+    .card {
+      background-color: var(--bg-card);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      padding: 1.5rem;
+      transition: all 0.35s cubic-bezier(0.19, 1, 0.22, 1); /* Mer sofistikerad övergång */
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transform: translateZ(0); /* Aktivera hårdvaruacceleration */
+    }
+    
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px) translateZ(0);
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0.8;
+    }
+    
+    .card:hover::before {
+      opacity: 1;
+      transform: scaleY(1.2);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      color: var(--primary-dark);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .card-title i {
+      font-size: 1.1rem;
+      color: var(--primary-color);
+    }
+    
+    .button-container {
+      display: flex;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+    
+    button {
+      background-color: var(--primary-color);
+      color: var(--text-light);
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    button:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    
+    button:disabled {
+      background-color: var(--text-tertiary);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    button i {
+      font-size: 1rem;
+    }
+    
+    .action-btn {
+      background-color: var(--accent-color);
+    }
+    
+    .action-btn:hover {
+      background-color: var(--accent-hover);
+    }
+    
+    .success-flash {
+      animation: flash-success 0.3s;
+    }
+    
+    @keyframes flash-success {
+      0% { background-color: var(--accent-color); }
+      50% { background-color: var(--success-color); }
+      100% { background-color: var(--accent-color); }
+    }
+    
+    .file-info {
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      background-color: var(--primary-light);
+      font-size: 0.95rem;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      border-left: 4px solid var(--primary-color);
+      transition: all var(--transition-normal);
+    }
+    
+    .file-info:hover {
+      transform: translateX(2px);
+    }
+    
+    .file-info-icon {
+      margin-right: 0.75rem;
+      color: var(--primary-color);
+      font-size: 1.1rem;
+    }
+    
+    .format-options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .option-group {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      transition: border-color var(--transition-fast);
+      background-color: var(--bg-card);
+    }
+    
+    .option-group:hover {
+      border-color: var(--border-hover);
+    }
+    
+    .option-group-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .option-group-title i {
+      color: var(--primary-color);
+      font-size: 0.95rem;
+    }
+    
+    .radio-group, .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+      padding: 0.5rem 0.5rem;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+      z-index: 2;
+      border-radius: var(--radius-sm);
+    }
+    
+    .option-item:hover {
+      transform: translateX(2px);
+      background-color: var(--bg-hover);
+    }
+    
+    /* Anpassade radioknappar */
+    .option-item input[type="radio"],
+    .option-item input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+      z-index: -1;
+    }
+    
+    .radio-custom,
+    .checkbox-custom {
+      position: relative;
+      display: inline-block;
+      height: 20px;
+      width: 20px;
+      background-color: #fff;
+      border: 2px solid var(--border-hover);
+      transition: all var(--transition-fast);
+      pointer-events: none;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      flex-shrink: 0;
+      /* Förbättringar för skärpa */
+      transform: translateZ(0); /* Aktivera hårdvaruacceleration */
+      -webkit-font-smoothing: subpixel-antialiased;
+    }
+    
+    .radio-custom {
+      border-radius: 50%;
+      /* Förbättra cirkelformen */
+      overflow: hidden;
+    }
+    
+    .checkbox-custom {
+      border-radius: var(--radius-sm);
+    }
+    
+    .option-item:hover .radio-custom,
+    .option-item:hover .checkbox-custom {
+      border-color: var(--primary-color);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transform: translateZ(0) scale(1.05); /* Subtil skalningseffekt */
+    }
+    
+    input[type="radio"]:checked ~ .radio-custom {
+      background-color: var(--primary-light);
+      border-color: var(--primary-color);
+      border-width: 2px;
+    }
+    
+    input[type="radio"]:checked ~ .radio-custom::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      /* Förbättra cirkelformen */
+      transform: translate(-50%, -50%) translateZ(0);
+    }
+    
+    input[type="checkbox"]:checked ~ .checkbox-custom {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-width: 2px;
+    }
+    
+    input[type="checkbox"]:checked ~ .checkbox-custom::after {
+      content: "✓";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      line-height: 1;
+      text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .option-item label {
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: color var(--transition-fast);
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+      padding: 0.25rem 0;
+      width: 100%;
+      letter-spacing: 0.01em;
+    }
+    
+    .option-item:hover label {
+      color: var(--text-primary);
+    }
+    
+    input[type="radio"]:checked ~ label,
+    input[type="checkbox"]:checked ~ label {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    
+    .preview-container {
+      position: relative;
+      flex: 1 1 auto;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      background-color: var(--color-bg-container);
+    }
+
+    .text-preview-wrapper {
+      flex: 1; 
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+    }
+
+    .text-preview {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      padding: 1.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      word-spacing: 0.05em;
+      white-space: pre-wrap;
+      word-break: break-word;
+      tab-size: 4;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    /* Stilar för metadata och sidmarkörer */
+    .text-preview .metadata {
+      padding: 0.5rem 1rem;
+      margin-bottom: 1.5rem;
+      background-color: var(--color-bg-container);
+      border-radius: 4px;
+      border-left: 3px solid var(--color-accent);
+      font-weight: 500;
+      opacity: 0.85;
+    }
+    
+    .text-preview .page-marker {
+      margin: 1.5rem 0;
+      padding: 0.3rem 0;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--color-text-faded);
+      border-bottom: 1px solid var(--color-border);
+    }
+    
+    .text-preview p {
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+    
+    /* Förbättringar för rullningslist */
+    .text-preview::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    
+    .text-preview::-webkit-scrollbar-track {
+      background: var(--color-bg-container);
+      border-radius: 4px;
+    }
+    
+    .text-preview::-webkit-scrollbar-thumb {
+      background: var(--color-border);
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    
+    .text-preview::-webkit-scrollbar-thumb:hover {
+      background: var(--color-accent);
+    }
+
+    .text-preview:focus {
+      outline: 2px solid var(--color-accent);
+      outline-offset: -2px;
+    }
+    
+    .preview-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none !important;
+      transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1), 
+                  visibility 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+      z-index: 1000;
+      backdrop-filter: blur(2px);
+      transform: translateZ(0); /* Aktivera hårdvaruacceleration */
+    }
+    
+    .preview-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto !important;
+    }
+    
+    /* Subtil pulsering för loading indicator */
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .loading-indicator {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--primary-light);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .preview-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1.25rem;
+      gap: 1rem;
+    }
+    
+    .status-message {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      margin-top: 1rem;
+      opacity: 0;
+      transition: opacity var(--transition-normal), transform var(--transition-normal);
+      transform: translateY(-10px);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .status-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .status-success {
+      background-color: var(--success-light);
+      color: var(--success-color);
+      border-left: 4px solid var(--success-color);
+    }
+    
+    .status-error {
+      background-color: var(--error-light);
+      color: var(--error-color);
+      border-left: 4px solid var(--error-color);
+    }
+    
+    .encoding-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      margin-top: 0.75rem;
+      transition: all var(--transition-fast);
+      background-color: #fcfcfc;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+    
+    .encoding-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px var(--primary-transparent), inset 0 2px 4px rgba(0, 0, 0, 0.02);
+      background-color: white;
+    }
+    
+    .encoding-input:disabled {
+      background-color: #f1f3f5;
+      color: var(--text-tertiary);
+      cursor: not-allowed;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .badge-new {
+      background-color: var(--primary-light);
+      color: var(--primary-dark);
+    }
+    
+    .badge-beta {
+      background-color: var(--warning-light);
+      color: var(--warning-color);
+    }
+    
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+    }
+    
+    .tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.5rem 0.75rem;
+      background-color: var(--text-primary);
+      color: white;
+      font-size: 0.8rem;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-fast);
+      z-index: 100;
+      pointer-events: none;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .tooltip:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(-8px);
+    }
+    
+    .utility-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+    }
+    
+    .text-preview:hover .utility-bar {
+      opacity: 1;
+    }
+    
+    .utility-button {
+      background: none;
+      border: none;
+      color: var(--text-tertiary);
+      padding: 0.25rem;
+      cursor: pointer;
+      transition: color var(--transition-fast);
+      box-shadow: none;
+    }
+    
+    .utility-button:hover {
+      color: var(--primary-color);
+      background: none;
+      box-shadow: none;
+      transform: none;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+    }
+    
+    footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    
+    footer a:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+    
+    .option-item:focus-within {
+      background-color: var(--primary-light);
+      outline: none;
+      box-shadow: 0 0 0 2px var(--primary-transparent);
+    }
+    
+    /* Förbättra radioknappar vid hover */
+    input[type="radio"]:focus ~ .radio-custom,
+    input[type="checkbox"]:focus ~ .checkbox-custom {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px var(--primary-transparent);
+    }
+    
+    /* Förbättrat scrollbar-utseende */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 5px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #c5d0e6;
+      border-radius: 5px;
+      transition: background var(--transition-fast);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-color);
+    }
+    
+    /* Förbättrat fokustillstånd */
+    *:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--primary-transparent);
+    }
+    
+    /* För större skärmar */
+    @media (min-width: 1600px) {
+      .app-container {
+        max-width: 1500px; /* Ännu större på riktigt breda skärmar */
+      }
+    }
+    
+    /* Optimera för resize-händelser */
+    @media (prefers-reduced-motion: no-preference) {
+      .text-preview {
+        transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+                    height 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+      }
+      
+      /* Subtil animation vid resize */
+      @keyframes content-resize {
+        0% { opacity: 0.97; }
+        50% { opacity: 0.99; }
+        100% { opacity: 1; }
+      }
+      
+      /* Lägg till reglerna i en större skärmstorleksregel */
+      @media (min-width: 1200px) {
+        .preview-container:has(.text-preview) {
+          animation: content-resize 0.5s ease-out forwards;
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Screamm<span class="logo-highlight">PDF</span></h1>
+      <p class="subtitle">Extrahera, formatera och kopiera text från PDF-filer med professionell precision</p>
+    </header>
+    
+    <div class="main-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-file-pdf"></i> PDF-fil och alternativ
+          </div>
+        </div>
+        
+        <div class="button-container">
+          <button id="openPdfBtn">
+            <i class="fas fa-folder-open"></i>
+            <span>Öppna PDF</span>
+          </button>
+        </div>
+        
+        <div class="file-info" id="fileInfo">
+          <i class="fas fa-info-circle file-info-icon"></i>
+          <span>Ingen fil öppnad</span>
+        </div>
+        
+        <div class="format-options-container">
+          <div class="option-group">
+            <div class="option-group-title">
+              <i class="fas fa-font"></i> Textformat
+            </div>
+            <div class="radio-group">
+              <div class="option-item">
+                <input type="radio" id="formatPlain" name="format" value="plain" checked>
+                <span class="radio-custom"></span>
+                <label for="formatPlain">Plain text (bevara radbrytningar)</label>
+              </div>
+              <div class="option-item">
+                <input type="radio" id="formatOneLine" name="format" value="oneline">
+                <span class="radio-custom"></span>
+                <label for="formatOneLine">En rad (ta bort radbrytningar)</label>
+              </div>
+              <div class="option-item">
+                <input type="radio" id="formatMarkdown" name="format" value="markdown">
+                <span class="radio-custom"></span>
+                <label for="formatMarkdown">Markdown</label>
+              </div>
+              <div class="option-item">
+                <input type="radio" id="formatHTML" name="format" value="html">
+                <span class="radio-custom"></span>
+                <label for="formatHTML">HTML</label>
+              </div>
+              <div class="option-item">
+                <input type="radio" id="formatJSON" name="format" value="json">
+                <span class="radio-custom"></span>
+                <label for="formatJSON">JSON</label>
+                <span class="badge badge-new">Ny</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="option-group">
+            <div class="option-group-title">
+              <i class="fas fa-language"></i> Teckenkodning
+            </div>
+            <div class="radio-group">
+              <div class="option-item">
+                <input type="radio" id="encodingUTF8" name="encoding" value="utf8" checked>
+                <span class="radio-custom"></span>
+                <label for="encodingUTF8">UTF-8 (standard)</label>
+              </div>
+              <div class="option-item">
+                <input type="radio" id="encodingLatin1" name="encoding" value="latin1">
+                <span class="radio-custom"></span>
+                <label for="encodingLatin1">ISO-8859-1 (Latin-1)</label>
+              </div>
+              <div class="option-item">
+                <input type="radio" id="encodingWindows1252" name="encoding" value="windows1252">
+                <span class="radio-custom"></span>
+                <label for="encodingWindows1252">Windows-1252</label>
+              </div>
+              <div class="option-item">
+                <input type="radio" id="encodingCustom" name="encoding" value="custom">
+                <span class="radio-custom"></span>
+                <label for="encodingCustom">Anpassad:</label>
+                <span class="badge badge-beta">Beta</span>
+              </div>
+              <input type="text" id="customEncoding" class="encoding-input" placeholder="Ange anpassad kodning (t.ex. shift_jis)" disabled>
+            </div>
+          </div>
+          
+          <div class="option-group">
+            <div class="option-group-title">
+              <i class="fas fa-sliders-h"></i> Textbehandling
+            </div>
+            <div class="checkbox-group">
+              <div class="option-item">
+                <input type="checkbox" id="optionTrim" checked>
+                <span class="checkbox-custom"></span>
+                <label for="optionTrim">Ta bort överflödiga blanksteg</label>
+              </div>
+              <div class="option-item">
+                <input type="checkbox" id="optionNormalize">
+                <span class="checkbox-custom"></span>
+                <label for="optionNormalize">Normalisera whitespace</label>
+              </div>
+              <div class="option-item">
+                <input type="checkbox" id="optionLowercase">
+                <span class="checkbox-custom"></span>
+                <label for="optionLowercase">Konvertera till gemener</label>
+              </div>
+              <div class="option-item">
+                <input type="checkbox" id="optionUppercase">
+                <span class="checkbox-custom"></span>
+                <label for="optionUppercase">Konvertera till versaler</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card preview-container">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fas fa-eye"></i> Förhandsgranskning
+          </div>
+        </div>
+        
+        <div class="text-preview-wrapper">
+          <div class="text-preview" id="textPreview">
+            Förhandsgranskningen visas här när du öppnar en PDF-fil.
+            
+            <div class="utility-bar">
+              <button class="utility-button tooltip" data-tooltip="Förstora text">
+                <i class="fas fa-search-plus"></i>
+              </button>
+              <button class="utility-button tooltip" data-tooltip="Förminska text">
+                <i class="fas fa-search-minus"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="preview-overlay" id="previewOverlay">
+            <div class="loading-indicator"></div>
+            <div>Hämtar text från PDF...</div>
+          </div>
+        </div>
+        
+        <div class="preview-actions">
+          <button id="copyTextBtn" class="action-btn" disabled>
+            <i class="fas fa-copy"></i>
+            <span>Kopiera text</span>
+          </button>
+          <button id="updatePreviewBtn" disabled>
+            <i class="fas fa-sync-alt"></i>
+            <span>Uppdatera förhandsgranskning</span>
+          </button>
+        </div>
+        
+        <div id="statusMessage" class="status-message"></div>
+      </div>
+    </div>
+    
+    <footer>
+      <p>ScreammPDF &copy; 2025 | Ett elegant verktyg för att extrahera text från PDF-filer | <a href="#" class="tooltip" data-tooltip="Kommer snart!">Dokumentation</a> | <a href="#" class="tooltip" data-tooltip="Rapportera problem!">Support</a></p>
+    </footer>
+  </div>
+  
+  <script src="renderer.js"></script>
+</body>
+</html> 
