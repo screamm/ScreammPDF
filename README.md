@@ -1,7 +1,9 @@
 # ScreammPDF
 
 <div align="center">
-  <img src="resources/logo.png" alt="ScreammPDF Logo" width="200" height="auto" />
+  <!-- Använd en extern bildlänk för logotypen -->
+  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/electron/electron-original.svg" alt="ScreammPDF Logo" width="100" height="auto" />
+  <h1>ScreammPDF</h1>
   <h3>Extract, Format, and Copy Text from PDF Files with Professional Precision</h3>
 </div>
 
@@ -26,14 +28,15 @@ ScreammPDF is an elegant desktop application for extracting and processing text 
 ## 📋 Screenshots
 
 <div align="center">
-  <img src="resources/screenshot.png" alt="ScreammPDF Interface" width="80%" />
+  <p><i>The ScreammPDF interface features a clean, modern design with a sidebar for formatting options and a large preview pane showing the extracted text.</i></p>
+  <p><i>A screenshot will be added when the UI is finalized.</i></p>
 </div>
 
 ## 🚀 Getting Started
 
 ### Using the Portable Version
 
-1. Download the latest release from the [Releases](https://github.com/YourUsername/ScreammPDF/releases) page
+1. Download the latest release from the Releases page
 2. Extract the ZIP file to a location of your choice
 3. Run `ScreammPDF.exe` or `ScreammPDF.bat` to start the application
 
@@ -50,7 +53,7 @@ If you're using PowerShell, you can use the included script to start the applica
 
 ```bash
 # Clone the repository
-git clone https://github.com/YourUsername/ScreammPDF.git
+git clone https://github.com/username/ScreammPDF.git
 
 # Navigate to the project directory
 cd ScreammPDF
@@ -130,24 +133,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact
 
-Project Link: [https://github.com/YourUsername/ScreammPDF](https://github.com/YourUsername/ScreammPDF)
+Project created with Electron and pdf-parse for high-quality text extraction from PDF files.
 
 ## 💖 Support the Project
 
 If you find ScreammPDF useful, please consider supporting its development. Your donations help maintain the project, add new features, and improve documentation.
 
 <div align="center">
-  <a href="https://www.paypal.me/YourPayPalName" target="_blank">
-    <img src="https://img.shields.io/badge/PayPal-Donate-blue?style=for-the-badge&logo=paypal" alt="Donate with PayPal" />
-  </a>
-  
-  <a href="https://ko-fi.com/YourKofiName" target="_blank">
-    <img src="https://img.shields.io/badge/Ko--fi-Support-orange?style=for-the-badge&logo=ko-fi" alt="Support on Ko-fi" />
-  </a>
-  
-  <a href="https://github.com/sponsors/YourUsername" target="_blank">
-    <img src="https://img.shields.io/badge/GitHub-Sponsor-purple?style=for-the-badge&logo=github" alt="Sponsor on GitHub" />
-  </a>
+  <p>Support options will be available soon!</p>
 </div>
 
 Every contribution is deeply appreciated and helps ensure ScreammPDF remains a high-quality, free tool for everyone.
@@ -155,5 +148,5 @@ Every contribution is deeply appreciated and helps ensure ScreammPDF remains a h
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by Your Name</sub>
+  <sub>Built with ❤️ for the PDF extraction community</sub>
 </div> 
