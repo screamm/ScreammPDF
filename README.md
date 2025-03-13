@@ -132,6 +132,26 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Project Link: [https://github.com/YourUsername/ScreammPDF](https://github.com/YourUsername/ScreammPDF)
 
+## 💖 Support the Project
+
+If you find ScreammPDF useful, please consider supporting its development. Your donations help maintain the project, add new features, and improve documentation.
+
+<div align="center">
+  <a href="https://www.paypal.me/YourPayPalName" target="_blank">
+    <img src="https://img.shields.io/badge/PayPal-Donate-blue?style=for-the-badge&logo=paypal" alt="Donate with PayPal" />
+  </a>
+  
+  <a href="https://ko-fi.com/YourKofiName" target="_blank">
+    <img src="https://img.shields.io/badge/Ko--fi-Support-orange?style=for-the-badge&logo=ko-fi" alt="Support on Ko-fi" />
+  </a>
+  
+  <a href="https://github.com/sponsors/YourUsername" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-Sponsor-purple?style=for-the-badge&logo=github" alt="Sponsor on GitHub" />
+  </a>
+</div>
+
+Every contribution is deeply appreciated and helps ensure ScreammPDF remains a high-quality, free tool for everyone.
+
 ---
 
 <div align="center">
