@@ -30,12 +30,6 @@ ScreammPDF is an elegant desktop application for extracting and processing text 
   <img src="resources/app-screenshot.png" alt="ScreammPDF Interface" width="80%" />
 </div>
 
-<!-- 
-INSTRUKTIONER FÖR ATT LÄGGA TILL SKÄRMDUMP:
-1. Ta en skärmdump av appen när den körs
-2. Spara den som "app-screenshot.png" i resources-mappen
-3. Ta bort dessa instruktioner när skärmdumpen är tillagd
--->
 
 ## 🚀 Getting Started
 
