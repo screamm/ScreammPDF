@@ -1,8 +1,7 @@
 # ScreammPDF
 
 <div align="center">
-  <!-- Använd en extern bildlänk för logotypen -->
-  <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/electron/electron-original.svg" alt="ScreammPDF Logo" width="100" height="auto" />
+  <!-- Enklare titeldesign utan extern ikon -->
   <h1>ScreammPDF</h1>
   <h3>Extract, Format, and Copy Text from PDF Files with Professional Precision</h3>
 </div>
@@ -25,12 +24,18 @@ ScreammPDF is an elegant desktop application for extracting and processing text 
 - **Character Encoding Support**: UTF-8, Latin-1, Windows-1252, and custom encoding options
 - **Portable Application**: No installation required - run directly from any location
 
-## 📋 Screenshots
+## 📋 Application Preview
 
 <div align="center">
-  <p><i>The ScreammPDF interface features a clean, modern design with a sidebar for formatting options and a large preview pane showing the extracted text.</i></p>
-  <p><i>A screenshot will be added when the UI is finalized.</i></p>
+  <img src="resources/app-screenshot.png" alt="ScreammPDF Interface" width="80%" />
 </div>
+
+<!-- 
+INSTRUKTIONER FÖR ATT LÄGGA TILL SKÄRMDUMP:
+1. Ta en skärmdump av appen när den körs
+2. Spara den som "app-screenshot.png" i resources-mappen
+3. Ta bort dessa instruktioner när skärmdumpen är tillagd
+-->
 
 ## 🚀 Getting Started
 
